@@ -1,0 +1,42 @@
+@productendpoint = https://wvtyo7q8ql.execute-api.ap-southeast-1.amazonaws.com/prod/
+
+#Id-token
+@token = eyJraWQiOiJRbjU3MmM0SW1vOFpXdFpueVo5MzYxcmdTcUJEWXhpS2xVQTB6Zk44RUVNPSIsImFsZyI6IlJTMjU2In0.eyJvcmlnaW5fanRpIjoiMTg3OWQ1MzQtOGY3YS00NzkzLWI0YzAtNmUwNjg3ZWQwYTZhIiwic3ViIjoiYzgwY2IyZTktMmQzZC00YjNhLWE4M2ItOGQwZjgwN2RkNDgzIiwiYXVkIjoiNDRqN3NpZXZkdjNqZjNja2VocnVkZWhhbGwiLCJldmVudF9pZCI6IjViNTA0ODU1LWNlOTEtNDcyZS04ZWZjLTU2NDE1MzM0YzA2ZSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjUzNzI2NDc5LCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTEuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTFfaDRNVTh5RUNpIiwiY29nbml0bzp1c2VybmFtZSI6InRlc3QiLCJleHAiOjE2NTM3MzAwNzksImlhdCI6MTY1MzcyNjQ3OSwianRpIjoiYjZkZGM4NjAtYzM3ZS00ZTYyLWJjZWItMTA1MDE5NDM2YjQwIn0.Jnq8rG8RRCzVnUPNGQT9fw2qyIvzFSTy5V5UbpTNCKXiWiQpuEi-le2xXmnRp_wdzYrXVnBahQoBe210cy4Qx3jkpf3fUsxM0iwA9CwM72mwJXxNNLklfwnjruSth_7FrqSt-t8SreMg66zUe0G1v_oLUmP34WW3dg2O6Qr9vls6UV54phRP382Hdr9DKy_fySckYJmk38hdRkcRN2jcbT75UYOs8lxzgLbrkwRvywbV552Cd6tAw5dUdQhoAkTdpsoFucIPjpNrFrcYaz5OdMXf1D1EJRAv7rw7-NSBo9pQVLnKRffK3FPg6a5abW9bjq9eCA5csF24hqP21VbSsw
+
+
+
+
+###
+
+
+GET {{productendpoint}}/product
+Authorization: {{token}}
+
+###
+
+POST  {{productendpoint}}/product
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "name": "IPhone X",
+    "description": "This phone is the company's biggest change to its flagship smartphone in years. It includes a borderless.",
+    "imageFile": "product-1.png",
+    "category": "Phone",
+    "price": 950.4
+}
+
+
+###
+POST  https://cognito-idp.ap-southeast-1.amazonaws.com
+Content-Type: application/x-amz-json-1.1
+X-Amz-Target: AWSCognitoIdentityProviderService.InitiateAuth
+
+{
+    "AuthParameters" : {
+        "USERNAME" : "test",
+        "PASSWORD" : "P@ssw0rd"
+    },
+    "AuthFlow" : "USER_PASSWORD_AUTH",
+    "ClientId" : "44j7sievdv3jf3ckehrudehall"
+}
