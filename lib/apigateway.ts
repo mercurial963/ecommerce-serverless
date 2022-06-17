@@ -1,10 +1,4 @@
-import {
-  AuthorizationType,
-  CognitoUserPoolsAuthorizer,
-  LambdaRestApi,
-  MethodOptions,
-} from "aws-cdk-lib/aws-apigateway";
-import { UserPool } from "aws-cdk-lib/aws-cognito";
+import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import { IFunction } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 
@@ -12,7 +6,6 @@ interface SwnApigatewayProps {
   productMicroservice: IFunction;
   basketMicroservice: IFunction;
   orderMicroservice: IFunction;
-  userpool: UserPool;
 }
 export class SwnApiGatway extends Construct {
   public readonly ApiGatewayProduct: LambdaRestApi;
@@ -20,36 +13,18 @@ export class SwnApiGatway extends Construct {
     super(scope, id);
 
     this.ApiGatewayProduct = this.createApiGatewayProduct(
-      prop.productMicroservice,
-      prop.userpool
+      prop.productMicroservice
     );
     this.createApiGatewayBasket(prop.basketMicroservice);
     this.createApiGatewayOrder(prop.orderMicroservice);
   }
 
-  private createApiGatewayProduct(
-    productMicroservice: IFunction,
-    userpool: UserPool
-  ) {
-    const authorizer = new CognitoUserPoolsAuthorizer(this, "Authorizer", {
-      cognitoUserPools: [userpool],
-      authorizerName: "Authorizer",
-      identitySource: "method.request.header.Authorization",
-    });
-
-    const optionsWithAuthorizer: MethodOptions = {
-      authorizationType: AuthorizationType.COGNITO,
-      authorizer: {
-        authorizerId: authorizer.authorizerId,
-      },
-    };
+  private createApiGatewayProduct(productMicroservice: IFunction) {
     const productApi = new LambdaRestApi(this, "productApi", {
       proxy: false,
       restApiName: "productApi",
       handler: productMicroservice,
-      defaultMethodOptions: optionsWithAuthorizer,
     });
-    authorizer._attachToApi(productApi);
     const products = productApi.root.addResource("product"); // /product
     products.addMethod("GET"); // GET /product
     products.addMethod("POST"); // POST /product
